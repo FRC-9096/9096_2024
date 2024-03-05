@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
@@ -32,7 +33,7 @@ public class RobotContainer {
 
   //REDEFINED FROM XBOXCONTROLLER TO COMMANDXBOXCONTROLLER
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-
+private final GenericHID JoystickButto = new GenericHID(0);
   public RobotContainer() {
     configureButtonBindings();
 
@@ -48,8 +49,9 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     // map button to commands, lockwheels is a placeholder here
-    new JoystickButton(m_driverController, Button.kStart.value)
-        .whileTrue(new RunCommand(
+    //Trigger JoystickButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+    Trigger JoystickButtonY = new JoystickButton(JoystickButto, XboxController.Button.kStart.value);
+        JoystickButtonY.whileTrue(new RunCommand(
             () -> m_robotDrive.lockWheels(),
             m_robotDrive));
 
