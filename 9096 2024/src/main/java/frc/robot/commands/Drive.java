@@ -7,8 +7,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Drive extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final DriveSubsystem driveSystem;
-  private final Limelight limelightSystem;
 
   Joystick ctrl = new Joystick(0);
   double pow;
@@ -16,9 +14,6 @@ public class Drive extends Command {
   double armInput;
   
   public Drive(DriveSubsystem drivesystem, Limelight limelightsystem) {
-    driveSystem = drivesystem;
-    limelightSystem = limelightsystem;
-    addRequirements(drivesystem, limelightsystem);
   }
 
   @Override
