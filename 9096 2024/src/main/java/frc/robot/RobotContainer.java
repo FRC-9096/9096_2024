@@ -18,13 +18,20 @@ import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.Shooter;
+import frc.robot.commands.Shoot;
+
 import java.util.List;
 
 public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+
+  //REDEFINED FROM XBOXCONTROLLER TO COMMANDXBOXCONTROLLER
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
 
   public RobotContainer() {
     configureButtonBindings();
@@ -45,7 +52,11 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.lockWheels(),
             m_robotDrive));
+
+    
   }
+
+
 
   public Command getAutonomousCommand() {
     TrajectoryConfig config = new TrajectoryConfig(
@@ -77,5 +88,26 @@ public class RobotContainer {
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
 
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
+  }
+
+  public void SetUpShooterButtons() {
+    
+    //random values for now
+    int a = 1;
+    int b = 1;
+    int c = 1;
+
+    Shooter foo = new Shooter(a, b, c);
+    Shooter food = new Shooter(0, 0, 0);
+    //I just thought this was funny 
+   // Shoot food = new Shoot();
+    
+
+
+    //Trigger xButton = m_driverController.x(); <-- Currently Redundant 
+    m_driverController.x().onTrue(Shoot.BeginLaunch(foo));
+    m_driverController.x().onFalse(Shoot.BeginLaunch(food));
+
+    
   }
 }

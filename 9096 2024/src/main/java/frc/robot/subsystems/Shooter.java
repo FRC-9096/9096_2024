@@ -4,13 +4,15 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import com.revrobotics.RelativeEncoder;
 
-public class Shooter {
+public class Shooter extends SubsystemBase {
   private final CANSparkMax m_upperShooter;
   private final RelativeEncoder m_upperShooterEncoder;
   private final CANSparkMax m_lowerShooter;
@@ -38,30 +40,21 @@ public class Shooter {
     m_lowerShooter.burnFlash();
     m_belt.burnFlash();
 
-    //ps4 bindings code 
-    //I just randomly chose port 1 because I didn't know what port we we're gonna use,
-    //this will probably be changed in the future
-    CommandXboxController MainController = new CommandXboxController(1);
-     Trigger IntakeButton = MainController.a();
-    
-    //I chose a random button we will revise later
-   //xbox controller mapping to DEVICE 11 for now 
-      MainController.a().onTrue();
-      
-    //Hi henry i didn't finish and I learned that I hate command based programming + Java 
-    //Enjoy the mess 
-    //-Nikolas Graupe
+   
 
   }
 
- 
+
+
 
   public float getLaunchVelocity() {
     return 0.0f;
   }
 
   public void setLaunchVelocity(float velocity) {
-    //
+    //use this one for launching
+    m_upperShooter.set(velocity);
+    m_lowerShooter.set(velocity);
   }
 
   public float getBeltVelocity() {
