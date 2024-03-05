@@ -55,6 +55,8 @@ public class Shooter extends SubsystemBase {
     //use this one for launching
     m_upperShooter.set(velocity);
     m_lowerShooter.set(velocity);
+
+    //Logic will be set up here, use first equation on AP physics equation sheet to calculate
   }
 
   public float getBeltVelocity() {
