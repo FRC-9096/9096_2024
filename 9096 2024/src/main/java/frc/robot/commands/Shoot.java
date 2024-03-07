@@ -1,5 +1,7 @@
 package frc.robot.commands;
 import frc.robot.subsystems.Shooter;
+import edu.wpi.first.units.Time;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.RobotContainer;
@@ -31,6 +33,11 @@ public class Shoot {
  }
 
 
+ public static Command Reload(Shooter shooter) {
 
-
-}
+        
+        
+        shooter.setBeltVelocity(1);
+        return null;
+ }
+ }

@@ -101,6 +101,8 @@ private final GenericHID JoystickButto = new GenericHID(0);
 
     Shooter foo = new Shooter(a, b, c);
     Shooter food = new Shooter(0, 0, 0);
+    
+    Shooter FloopFoodFooFoop = new Shooter(1, 0, 1); 
     //I just thought this was funny 
    // Shoot food = new Shoot();
     
@@ -109,6 +111,7 @@ private final GenericHID JoystickButto = new GenericHID(0);
     //Trigger xButton = m_driverController.x(); <-- Currently Redundant 
     m_driverController.x().onTrue(Shoot.BeginLaunch(foo));
     m_driverController.x().onFalse(Shoot.BeginLaunch(food));
+    m_driverController.a().whileTrue(Shoot.Reload(FloopFoodFooFoop));
 
     
   }

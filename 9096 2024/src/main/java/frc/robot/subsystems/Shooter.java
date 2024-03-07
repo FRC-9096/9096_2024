@@ -57,6 +57,8 @@ public class Shooter extends SubsystemBase {
     m_lowerShooter.set(velocity);
 
     //Logic will be set up here, use first equation on AP physics equation sheet to calculate
+
+    //Edit; Maybe the logic will be set up here? Im not sure whether we'll calculate values here or just have set ones yet
   }
 
   public float getBeltVelocity() {
@@ -65,7 +67,7 @@ public class Shooter extends SubsystemBase {
 
   public void setBeltVelocity(float velocity) {
     //
-    
+    m_belt.set(velocity);
   }
 
   public void resetEncoders() {
