@@ -16,24 +16,20 @@ public class Shoot {
     //CANId's
     //Exact velocities
     //Decision on whether shooting logic (calculating time, velocity, etc) is going to be handled in the shooter class
-    Shooter foop = new Shooter(11, 10, 9, 12,13);
+    //Shooter foop = new Shooter(11, 10, 9, 12,13);
     
-    if (shooter == foop) {
+    
         shooter.setLaunchVelocity(1.f);
-        return null;
-    } else if (shooter != foop) {
+        
 
-        System.out.println("Turned Launcher system off");
         return null;
-    }
+    
+}
 
     
     //velocity to be determined
     //calculations will be done here or in shooter.java
-    
-    return null;
 
- }
 
 
  public static Command Reload(Shooter shooter) {

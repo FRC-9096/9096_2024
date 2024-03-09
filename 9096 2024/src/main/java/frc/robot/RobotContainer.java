@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.Shoot;
-
+import frc.robot.subsystems.Limelight;
 import java.util.List;
 
 public class RobotContainer {
@@ -36,6 +36,13 @@ public class RobotContainer {
 private final GenericHID JoystickButto = new GenericHID(0);
   public RobotContainer() {
     configureButtonBindings();
+
+    //Limelight called
+    Limelight CallCamera = new Limelight();
+    CallCamera.setUpCameras();
+    
+
+
 
     m_robotDrive.setDefaultCommand(
         new RunCommand(
@@ -100,7 +107,7 @@ private final GenericHID JoystickButto = new GenericHID(0);
     int c = 9;
 
     Shooter foo = new Shooter(a, b, c, 12, 13);
-    Shooter food = new Shooter(0, 0, 0, 12, 13);
+    //Shooter food = new Shooter(0, 0, 0, 12, 13);
     
     Shooter FloopFoodFooFoop = new Shooter(11, 10, 9, 12, 13); 
     //I just thought this was funny 
@@ -110,7 +117,7 @@ private final GenericHID JoystickButto = new GenericHID(0);
 
     //Trigger xButton = m_driverController.x(); <-- Currently Redundant 
     m_driverController.x().onTrue(Shoot.BeginLaunch(foo));
-    m_driverController.x().onFalse(Shoot.BeginLaunch(food));
+    //m_driverController.x().onFalse(Shoot.BeginLaunch(food));
     m_driverController.a().whileTrue(Shoot.Reload(FloopFoodFooFoop));
 
     
