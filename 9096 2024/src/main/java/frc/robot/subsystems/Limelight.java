@@ -6,6 +6,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 
 public class Limelight extends SubsystemBase {
 
@@ -18,7 +22,22 @@ public class Limelight extends SubsystemBase {
   NetworkTableEntry botpose = table.getEntry("targetpose_cameraspace");
   double v = tv.getNumber(0).doubleValue();
 
+  public final UsbCamera FrontFacingCamerma = new UsbCamera("Front Camera", 0);
+
   public Limelight() {
+   
+    
+    
+
+  }
+
+  public void setUpCameras() {
+
+ CameraServer.startAutomaticCapture();
+    
+    CvSink SetSink = CameraServer.getVideo();
+    CvSource SendBack = CameraServer.putVideo("Front Camera", 800, 800);
+
   }
 
   public Number getPipeline() {
