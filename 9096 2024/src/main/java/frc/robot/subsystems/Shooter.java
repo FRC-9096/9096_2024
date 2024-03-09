@@ -2,13 +2,15 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
-
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 //import edu.wpi.first.wpilibj2.command.Command;
 //import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 //import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 //import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 //import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 import com.revrobotics.RelativeEncoder;
 
@@ -54,6 +56,7 @@ public class Shooter extends SubsystemBase {
   public void setLaunchVelocity(float velocity) {
     //use this one for launching
     m_upperShooter.set(velocity);
+    new WaitCommand(0.5); 
     m_lowerShooter.set(velocity);
 
     //Logic will be set up here, use first equation on AP physics equation sheet to calculate
