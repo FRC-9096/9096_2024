@@ -101,12 +101,9 @@ private final GenericHID JoystickButto = new GenericHID(0);
 
   public void SetUpShooterButtons() {
     
-    //random values for now
-    int a = 11;
-    int b = 10;
-    int c = 9;
+    
 
-    Shooter foo = new Shooter(a, b, c, 12, 13);
+    Shooter foo = new Shooter(11, 10, 11, 12, 13);
     //Shooter food = new Shooter(0, 0, 0, 12, 13);
     
     Shooter FloopFoodFooFoop = new Shooter(11, 10, 9, 12, 13); 
@@ -115,10 +112,13 @@ private final GenericHID JoystickButto = new GenericHID(0);
     
 
 
-    //Trigger xButton = m_driverController.x(); <-- Currently Redundant 
-    m_driverController.x().onTrue(Shoot.BeginLaunch(foo));
+    Trigger xButton = m_driverController.x(); //<-- Currently Redundant 
+   // m_driverController.xButton().onTrue(Shoot.BeginLaunch(foo));
+    xButton.onTrue(Shoot.BeginLaunch(foo));
     //m_driverController.x().onFalse(Shoot.BeginLaunch(food));
-    m_driverController.a().whileTrue(Shoot.Reload(FloopFoodFooFoop));
+    Trigger aButton = m_driverController.a();
+   // m_driverController.a().whileTrue(Shoot.Reload(FloopFoodFooFoop));
+   aButton.whileTrue(Shoot.Reload(FloopFoodFooFoop));
 
     
   }
