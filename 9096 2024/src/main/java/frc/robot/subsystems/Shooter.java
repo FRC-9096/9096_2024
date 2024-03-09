@@ -21,15 +21,20 @@ public class Shooter extends SubsystemBase {
   private final RelativeEncoder m_lowerShooterEncoder;
   private final CANSparkMax m_belt;
   private final RelativeEncoder m_beltEncoder;
+  private final CANSparkMax m_feederM1;
+  private final CANSparkMax m_feederm2;
 
-  public Shooter(int upperCANId, int lowerCANId, int beltCANId) {
+  public Shooter(int upperCANId, int lowerCANId, int beltCANId, int feeder1, int feeder2) {
     m_upperShooter = new CANSparkMax(upperCANId, MotorType.kBrushless);
     m_lowerShooter = new CANSparkMax(lowerCANId, MotorType.kBrushless);
     m_belt = new CANSparkMax(beltCANId, MotorType.kBrushless);
+    m_feederM1 = new CANSparkMax(feeder1, MotorType.kBrushless);
+    m_feederm2 = new CANSparkMax(feeder2, MotorType.kBrushless);
 
     m_upperShooterEncoder = m_upperShooter.getEncoder();
     m_lowerShooterEncoder = m_upperShooter.getEncoder();
     m_beltEncoder = m_belt.getEncoder();
+    
 
     /* configure motor as needed. For example:
     m_upperShooterEncoder.setPositionConversionFactor(some factor);
@@ -41,12 +46,18 @@ public class Shooter extends SubsystemBase {
     m_upperShooter.burnFlash();
     m_lowerShooter.burnFlash();
     m_belt.burnFlash();
+    m_feederM1.burnFlash();
+    m_feederm2.burnFlash();
+    
 
    
 
   }
 
-
+public void feederVelocity(float velocity) {
+m_feederM1.set(velocity);
+m_feederm2.set(velocity);
+}
 
 
   public float getLaunchVelocity() {
@@ -56,7 +67,7 @@ public class Shooter extends SubsystemBase {
   public void setLaunchVelocity(float velocity) {
     //use this one for launching
     m_upperShooter.set(velocity);
-    new WaitCommand(0.2); 
+    new WaitCommand(0.2); //Delay allows upper motor to get to speed before releasing other thing
     m_lowerShooter.set(velocity);
 
     //Logic will be set up here, use first equation on AP physics equation sheet to calculate

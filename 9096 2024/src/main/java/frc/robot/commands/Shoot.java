@@ -16,7 +16,7 @@ public class Shoot {
     //CANId's
     //Exact velocities
     //Decision on whether shooting logic (calculating time, velocity, etc) is going to be handled in the shooter class
-    Shooter foop = new Shooter(1, 1, 1);
+    Shooter foop = new Shooter(11, 10, 9, 12,13);
     
     if (shooter == foop) {
         shooter.setLaunchVelocity(1.f);
@@ -41,6 +41,7 @@ public class Shoot {
         
         
         shooter.setBeltVelocity(1);
+        shooter.feederVelocity(1);
         return null;
  }
  }

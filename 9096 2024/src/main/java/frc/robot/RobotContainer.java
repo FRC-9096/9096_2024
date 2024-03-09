@@ -95,14 +95,14 @@ private final GenericHID JoystickButto = new GenericHID(0);
   public void SetUpShooterButtons() {
     
     //random values for now
-    int a = 1;
-    int b = 1;
-    int c = 1;
+    int a = 11;
+    int b = 10;
+    int c = 9;
 
-    Shooter foo = new Shooter(a, b, c);
-    Shooter food = new Shooter(0, 0, 0);
+    Shooter foo = new Shooter(a, b, c, 12, 13);
+    Shooter food = new Shooter(0, 0, 0, 12, 13);
     
-    Shooter FloopFoodFooFoop = new Shooter(1, 0, 1); 
+    Shooter FloopFoodFooFoop = new Shooter(11, 10, 9, 12, 13); 
     //I just thought this was funny 
    // Shoot food = new Shoot();
     
