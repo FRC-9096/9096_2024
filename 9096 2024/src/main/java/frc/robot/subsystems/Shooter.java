@@ -56,7 +56,7 @@ public class Shooter extends SubsystemBase {
   public void setLaunchVelocity(float velocity) {
     //use this one for launching
     m_upperShooter.set(velocity);
-    new WaitCommand(0.5); 
+    new WaitCommand(0.2); 
     m_lowerShooter.set(velocity);
 
     //Logic will be set up here, use first equation on AP physics equation sheet to calculate
