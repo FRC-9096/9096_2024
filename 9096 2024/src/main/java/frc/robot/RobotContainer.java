@@ -13,18 +13,20 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Reload;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Shooter;
+import frc.robot.commands.ReloadLauncher;
 import frc.robot.commands.Shoot;
 import java.util.List;
 
 public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(11, 10, 9, 12, 13); 
-
+  private final Reload m_reload = new Reload(12, 13, 9);
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   public RobotContainer() {
     configureButtonBindings();
@@ -41,6 +43,7 @@ public class RobotContainer {
 
   private void configureButtonBindings() {
     m_driverController.a().onTrue(new Shoot(m_shooter));
+    m_driverController.x().onTrue(new ReloadLauncher(m_reload));
   }
 
 

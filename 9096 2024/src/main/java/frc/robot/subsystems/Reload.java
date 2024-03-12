@@ -26,4 +26,13 @@ public Reload(int lowerIntake1, int lowerIntake2, int intakeBelt) {
     m_belt.burnFlash();
 }
 
+
+
+public void setReloadVelocity(double velocity) {
+
+    m_bottomFeeder.set(velocity);
+    m_bottomFeeder2.set(velocity);
+    m_belt.set(velocity);
+}
+
 }
