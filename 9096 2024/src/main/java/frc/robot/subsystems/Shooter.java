@@ -48,10 +48,6 @@ public class Shooter extends SubsystemBase {
     m_belt.burnFlash();
     m_feederM1.burnFlash();
     m_feederm2.burnFlash();
-    
-
-   
-
   }
 
 public void feederVelocity(float velocity) {
@@ -60,11 +56,11 @@ m_feederm2.set(velocity);
 }
 
 
-  public float getLaunchVelocity() {
-    return 0.0f;
+  public double getLaunchVelocity() {
+    return 0.0;
   }
 
-  public void setLaunchVelocity(float velocity) {
+  public void setLaunchVelocity(double velocity) {
     //use this one for launching
     m_upperShooter.set(velocity);
     new WaitCommand(0.2); //Delay allows upper motor to get to speed before releasing other thing
@@ -75,11 +71,11 @@ m_feederm2.set(velocity);
     //Edit; Maybe the logic will be set up here? Im not sure whether we'll calculate values here or just have set ones yet
   }
 
-  public float getBeltVelocity() {
-    return 0.0f;
+  public double getBeltVelocity() {
+    return 0.0;
   }
 
-  public void setBeltVelocity(float velocity) {
+  public void setBeltVelocity(double velocity) {
     //
     m_belt.set(velocity);
   }

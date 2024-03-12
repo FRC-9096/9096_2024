@@ -23,7 +23,7 @@ public class Shoot extends Command {
 
   @Override
   public void execute() {
-        m_shooter.setLaunchVelocity(1.0f);
+        m_shooter.setLaunchVelocity(1.0);
   }
 
   @Override
@@ -33,6 +33,6 @@ public class Shoot extends Command {
 
   @Override
   public boolean isFinished() {
-    return Timer.getFPGATimestamp() - startTS > 2;
+    return Timer.getFPGATimestamp() - startTS > 0.5;
   }
 }
