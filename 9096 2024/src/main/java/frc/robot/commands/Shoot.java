@@ -1,43 +1,38 @@
 package frc.robot.commands;
-import frc.robot.subsystems.Shooter;
-//import edu.wpi.first.units.Time;
-//import edu.wpi.first.wpilibj.Timer;
+
 import edu.wpi.first.wpilibj2.command.Command;
-//import edu.wpi.first.wpilibj2.command.Subsystem;
-//import frc.robot.RobotContainer;
+import frc.robot.subsystems.Shooter;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Timer;
 
+public class Shoot extends Command {
+  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  private final Shooter m_shooter;
+  PIDController pid;
+  double startTS;
+  
+  public Shoot(Shooter shooter) {
+    m_shooter = shooter;
+    addRequirements(m_shooter);
+  }
 
+  @Override
+  public void initialize() {
+    startTS = Timer.getFPGATimestamp();
+  }
 
-public class Shoot {
-    
- public static Command BeginLaunch(Shooter shooter) {
-    
-    //Things needed for the code to work:
-    //CANId's
-    //Exact velocities
-    //Decision on whether shooting logic (calculating time, velocity, etc) is going to be handled in the shooter class
-    //Shooter foop = new Shooter(11, 10, 9, 12,13);
-    
-    
-        shooter.setLaunchVelocity(1.f);
-        
+  @Override
+  public void execute() {
+        m_shooter.setLaunchVelocity(1.0f);
+  }
 
-        return null;
-    
+  @Override
+  public void end(boolean interrupted) {
+    m_shooter.setLaunchVelocity(0);
+  }
+
+  @Override
+  public boolean isFinished() {
+    return Timer.getFPGATimestamp() - startTS > 2;
+  }
 }
-
-    
-    //velocity to be determined
-    //calculations will be done here or in shooter.java
-
-
-
- public static Command Reload(Shooter shooter) {
-
-        
-        
-        shooter.setBeltVelocity(1);
-        shooter.feederVelocity(1);
-        return null;
- }
- }

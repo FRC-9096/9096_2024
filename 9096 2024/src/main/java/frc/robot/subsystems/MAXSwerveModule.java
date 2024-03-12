@@ -35,8 +35,8 @@ public class MAXSwerveModule {
     m_turningSparkMax.restoreFactoryDefaults();
 
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
-    System.out.println(m_drivingEncoder);
     m_turningEncoder = m_turningSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
+
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
@@ -111,8 +111,8 @@ public class MAXSwerveModule {
         new Rotation2d(m_turningEncoder.getPosition()));
 
     // set new PID target
-    //m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
-    m_turningPIDController.setReference(1.0, CANSparkMax.ControlType.kPosition);
+    m_drivingPIDController.setReference(optimizedDesiredState.speedMetersPerSecond, CANSparkMax.ControlType.kVelocity);
+    m_turningPIDController.setReference(optimizedDesiredState.angle.getRadians(), CANSparkMax.ControlType.kPosition);
     m_desiredState = desiredState;
   }
 

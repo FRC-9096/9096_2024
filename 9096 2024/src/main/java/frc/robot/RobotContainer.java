@@ -9,9 +9,6 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.XboxController;
-//import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -20,49 +17,30 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.Shoot;
-import frc.robot.subsystems.Limelight;
 import java.util.List;
 
 public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Shooter m_shooter = new Shooter(11, 10, 9, 12, 13); 
 
-
-  //REDEFINED FROM XBOXCONTROLLER TO COMMANDXBOXCONTROLLER
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
-private final GenericHID JoystickButto = new GenericHID(0);
   public RobotContainer() {
     configureButtonBindings();
-
-    //Limelight called
-    Limelight CallCamera = new Limelight();
-    CallCamera.setUpCameras();
-    
-
-
 
     m_robotDrive.setDefaultCommand(
         new RunCommand(
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
   }
 
   private void configureButtonBindings() {
-    // map button to commands, lockwheels is a placeholder here
-    //Trigger JoystickButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
-    Trigger JoystickButtonY = new JoystickButton(JoystickButto, XboxController.Button.kStart.value);
-        JoystickButtonY.whileTrue(new RunCommand(
-            () -> m_robotDrive.lockWheels(),
-            m_robotDrive));
-
-    
+    m_driverController.a().onTrue(new Shoot(m_shooter));
   }
 
 
@@ -99,29 +77,6 @@ private final GenericHID JoystickButto = new GenericHID(0);
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
   }
 
-  public void SetUpShooterButtons() {
-    
-    //random values for now
-    int a = 11;
-    int b = 10;
-    int c = 9;
-
-    Shooter foo = new Shooter(a, b, c, 12, 13);
-    //Shooter food = new Shooter(0, 0, 0, 12, 13);
-    
-    Shooter FloopFoodFooFoop = new Shooter(11, 10, 9, 12, 13); 
-    //I just thought this was funny 
-   // Shoot food = new Shoot();
-    
-
-
-    //Trigger xButton = m_driverController.x(); <-- Currently Redundant 
-    m_driverController.x().onTrue(Shoot.BeginLaunch(foo));
-    //m_driverController.x().onFalse(Shoot.BeginLaunch(food));
-    m_driverController.a().whileTrue(Shoot.Reload(FloopFoodFooFoop));
-
-    
-  }
 }  
 
 
