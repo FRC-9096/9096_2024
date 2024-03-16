@@ -23,7 +23,7 @@ public class Shoot extends Command {
 
   @Override
   public void execute() {
-        m_shooter.setLaunchVelocity(1.0);
+    m_shooter.setLaunchVelocity(1.0);
   }
 
   @Override

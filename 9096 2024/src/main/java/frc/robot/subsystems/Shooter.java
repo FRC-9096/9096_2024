@@ -21,38 +21,30 @@ public class Shooter extends SubsystemBase {
   private final RelativeEncoder m_lowerShooterEncoder;
   private final CANSparkMax m_belt;
   private final RelativeEncoder m_beltEncoder;
-  private final CANSparkMax m_feederM1;
-  private final CANSparkMax m_feederm2;
+  private final CANSparkMax m_feeder1;
+  private final CANSparkMax m_feeder2;
 
   public Shooter(int upperCANId, int lowerCANId, int beltCANId, int feeder1, int feeder2) {
     m_upperShooter = new CANSparkMax(upperCANId, MotorType.kBrushless);
     m_lowerShooter = new CANSparkMax(lowerCANId, MotorType.kBrushless);
     m_belt = new CANSparkMax(beltCANId, MotorType.kBrushless);
-    m_feederM1 = new CANSparkMax(feeder1, MotorType.kBrushless);
-    m_feederm2 = new CANSparkMax(feeder2, MotorType.kBrushless);
+    m_feeder1 = new CANSparkMax(feeder1, MotorType.kBrushless);
+    m_feeder2 = new CANSparkMax(feeder2, MotorType.kBrushless);
 
     m_upperShooterEncoder = m_upperShooter.getEncoder();
     m_lowerShooterEncoder = m_upperShooter.getEncoder();
     m_beltEncoder = m_belt.getEncoder();
     
-
-    /* configure motor as needed. For example:
-    m_upperShooterEncoder.setPositionConversionFactor(some factor);
-    m_upperShooterEncoder.setVelocityConversionFactor(some factor);
-    m_upperShooterEncoder.setInverted(bool);
-    m_upperShooter.setIdleMode(idle mode);
-    m_upperShooter.setSmartCurrentLimit(limit);
-    */
     m_upperShooter.burnFlash();
     m_lowerShooter.burnFlash();
     m_belt.burnFlash();
-    m_feederM1.burnFlash();
-    m_feederm2.burnFlash();
+    m_feeder1.burnFlash();
+    m_feeder2.burnFlash();
   }
 
 public void feederVelocity(float velocity) {
-m_feederM1.set(velocity);
-m_feederm2.set(velocity);
+m_feeder1.set(velocity);
+m_feeder2.set(velocity);
 }
 
 
@@ -61,14 +53,9 @@ m_feederm2.set(velocity);
   }
 
   public void setLaunchVelocity(double velocity) {
-    //use this one for launching
     m_upperShooter.set(velocity);
-    new WaitCommand(0.2); //Delay allows upper motor to get to speed before releasing other thing
+    new WaitCommand(0.7);
     m_lowerShooter.set(velocity);
-
-    //Logic will be set up here, use first equation on AP physics equation sheet to calculate
-
-    //Edit; Maybe the logic will be set up here? Im not sure whether we'll calculate values here or just have set ones yet
   }
 
   public double getBeltVelocity() {
@@ -83,4 +70,10 @@ m_feederm2.set(velocity);
   public void resetEncoders() {
     //
   }
+
+  
+public void setReloadVelocity(double velocity) {
+  m_feeder1.set(velocity);
+  m_feeder2.set(velocity);
+}
 }
