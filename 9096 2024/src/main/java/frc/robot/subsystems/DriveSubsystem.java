@@ -17,6 +17,7 @@ import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
+  boolean disabled = false;
   AHRS gyro = new AHRS(SPI.Port.kMXP);
 
   private final MAXSwerveModule m_frontLeft = new MAXSwerveModule(
@@ -88,7 +89,17 @@ public class DriveSubsystem extends SubsystemBase {
         pose);
   }
 
+  public void disable() {
+    disabled = true;
+    drive(0.0, 0.0, 0.0, false, false);
+  }
+
+  public void enable() {
+    disabled = false;
+  }
+
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
+    if (!disabled) {
     double xSpeedCommanded;
     double ySpeedCommanded;
 
@@ -153,7 +164,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
-
+  }
   }
 
   public void setModuleStates(SwerveModuleState[] desiredStates) {
@@ -170,6 +181,14 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearLeft.resetEncoders();
     m_frontRight.resetEncoders();
     m_rearRight.resetEncoders();
+  }
+
+  public void lockWheels() {
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-45)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
+
   }
 
   public void zeroHeading() {

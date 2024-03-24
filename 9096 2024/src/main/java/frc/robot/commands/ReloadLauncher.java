@@ -9,16 +9,10 @@ public class ReloadLauncher extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Shooter m_shooter;
   PIDController pid;
-  double startTS;
   
   public ReloadLauncher(Shooter shooter) {
     m_shooter = shooter;
     addRequirements(m_shooter);
-  }
-
-  @Override
-  public void initialize() {
-    startTS = Timer.getFPGATimestamp();
   }
 
   @Override
@@ -33,8 +27,4 @@ public class ReloadLauncher extends Command {
     m_shooter.setBeltVelocity(0);
   }
   
-  @Override
-  public boolean isFinished() {
-    return Timer.getFPGATimestamp() - startTS > 0.5;
-  }
 }

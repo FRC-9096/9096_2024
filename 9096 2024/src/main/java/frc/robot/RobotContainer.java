@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.ExpellRing;
@@ -47,20 +48,22 @@ public class RobotContainer {
   }
 
   private void configureButtonBindings() {
-    m_secondaryController.a().onTrue(new Shoot(m_shooter));
+    m_secondaryController.a().onTrue(new Shoot(m_shooter, m_robotDrive));
     m_secondaryController.x().whileTrue(new ReloadLauncher(m_shooter));
     m_secondaryController.b().whileTrue(new ExpellRing(m_shooter));
+    m_secondaryController.y().whileTrue(
+      new RunCommand(() -> m_robotDrive.lockWheels(), m_robotDrive)
+    );
   }
 
   private void configureShuffleboard() {
-    autoChooser.setDefaultOption("Center", genAutoCommand(0));
-    autoChooser.addOption("Left", genAutoCommand(0.5));
-    autoChooser.addOption("Right", genAutoCommand(-0.5));
+    autoChooser.addOption("Blue", genAutoCommand(1.0));
+    autoChooser.addOption("Red", genAutoCommand(-1.0));
 
     edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
-  private Command genAutoCommand(double yMovement) {
+  private Command genAutoCommand(double dir) {
     TrajectoryConfig config = new TrajectoryConfig(
         AutoConstants.kMaxSpeedMetersPerSecond,
         AutoConstants.kMaxAccelerationMetersPerSecondSquared)
@@ -69,7 +72,7 @@ public class RobotContainer {
     Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
         new Pose2d(-0.0, 0.0, new Rotation2d(0)),
         List.of(new Translation2d(-1.0, 0.01)),
-        new Pose2d(-2.0, yMovement, new Rotation2d(0)),
+        new Pose2d(-1.5, 0.01, new Rotation2d(0)),
         config);
 
     var thetaController = new ProfiledPIDController(
@@ -91,8 +94,9 @@ public class RobotContainer {
 
     return Commands.sequence(
         new PositionRing(m_shooter),
-        new Shoot(m_shooter),
-        swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false))
+        new Shoot(m_shooter, m_robotDrive).andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
+        new WaitCommand(10).andThen(() -> m_robotDrive.drive(-0.25, 0.25 * dir, 0, false, false)),
+          new WaitCommand(3.0).andThen(() -> m_robotDrive.drive(0, 0, 0, false, false))
       );
   }
 

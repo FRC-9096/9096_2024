@@ -54,7 +54,14 @@ m_feeder2.set(velocity);
 
   public void setLaunchVelocity(double velocity) {
     m_upperShooter.set(velocity);
-    new WaitCommand(0.7);
+    m_lowerShooter.set(velocity);
+  }
+
+  public void setUpperVelocity(double velocity) {
+    m_upperShooter.set(velocity);
+  }
+
+  public void setLowerVelocity(double velocity) {
     m_lowerShooter.set(velocity);
   }
 
@@ -63,12 +70,7 @@ m_feeder2.set(velocity);
   }
 
   public void setBeltVelocity(double velocity) {
-    //
     m_belt.set(velocity);
-  }
-
-  public void resetEncoders() {
-    //
   }
 
   
