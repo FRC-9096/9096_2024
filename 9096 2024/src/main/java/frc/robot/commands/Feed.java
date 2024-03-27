@@ -6,14 +6,14 @@ import frc.robot.subsystems.Shooter;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 
-public class Shoot extends Command {
+public class Feed extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final Shooter m_shooter;
   private final DriveSubsystem m_drive;
   PIDController pid;
   double startTS;
   
-  public Shoot(Shooter shooter, DriveSubsystem drive) {
+  public Feed(Shooter shooter, DriveSubsystem drive) {
     m_shooter = shooter;
     m_drive = drive;
     addRequirements(m_shooter, drive);
@@ -27,20 +27,8 @@ public class Shoot extends Command {
 
   @Override
   public void execute() {
-    m_shooter.setUpperVelocity(1.1);
-    if (Timer.getFPGATimestamp() - startTS > 0.5) {
-      m_shooter.setLowerVelocity(1.1);
-    }
-    if ((Timer.getFPGATimestamp() - startTS) > 0.1 && 
-    (Timer.getFPGATimestamp() - startTS) < 0.15) {
-      m_shooter.setBeltVelocity(0);
-    }
-    if (Timer.getFPGATimestamp() - startTS < 0.1) {
-      m_drive.drive(0, 0, 0, false, false);
-      m_shooter.setBeltVelocity(0.5);
-    } else {
-      m_drive.disable();
-    }
+    m_shooter.setUpperVelocity(-0.1);
+    m_shooter.setLowerVelocity(-0.1);
   }
 
   @Override
@@ -49,8 +37,4 @@ public class Shoot extends Command {
     m_drive.enable();
   }
 
-  @Override
-  public boolean isFinished() {
-    return Timer.getFPGATimestamp() - startTS > 1.5;
-  }
 }

@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.Shooter;
 import frc.robot.commands.ExpellRing;
+import frc.robot.commands.Feed;
 import frc.robot.commands.PositionRing;
 import frc.robot.commands.ReloadLauncher;
 import frc.robot.commands.Shoot;
@@ -28,13 +29,21 @@ import java.util.List;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+
 public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(11, 10, 9, 12, 13); 
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_secondaryController = new CommandXboxController(OIConstants.kDriverControllerPort + 1);
-  private final SendableChooser<Command> autoChooser = new SendableChooser<>();
+  private SendableChooser<Command> autoChooser;
+
   public RobotContainer() {
+    NamedCommands.registerCommand("Shoot", new Shoot(m_shooter, m_robotDrive));
+    NamedCommands.registerCommand("Lock", new RunCommand(() -> m_robotDrive.lockWheels(), m_robotDrive));
+    
+    autoChooser = AutoBuilder.buildAutoChooser();
     configureButtonBindings();
     configureShuffleboard();
     m_robotDrive.setDefaultCommand(
@@ -54,50 +63,11 @@ public class RobotContainer {
     m_secondaryController.y().whileTrue(
       new RunCommand(() -> m_robotDrive.lockWheels(), m_robotDrive)
     );
+    m_secondaryController.rightTrigger().whileTrue(new Feed(m_shooter, m_robotDrive));
   }
 
   private void configureShuffleboard() {
-    autoChooser.addOption("Blue", genAutoCommand(1.0));
-    autoChooser.addOption("Red", genAutoCommand(-1.0));
-
-    edu.wpi.first.wpilibj.smartdashboard.SmartDashboard.putData("Auto Chooser", autoChooser);
-  }
-
-  private Command genAutoCommand(double dir) {
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        .setKinematics(DriveConstants.kDriveKinematics);
-
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        new Pose2d(-0.0, 0.0, new Rotation2d(0)),
-        List.of(new Translation2d(-1.0, 0.01)),
-        new Pose2d(-1.5, 0.01, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose,
-        DriveConstants.kDriveKinematics,
-
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    return Commands.sequence(
-        new PositionRing(m_shooter),
-        new Shoot(m_shooter, m_robotDrive).andThen(() -> m_robotDrive.drive(0, 0, 0, false, false)),
-        new WaitCommand(10).andThen(() -> m_robotDrive.drive(-0.25, 0.25 * dir, 0, false, false)),
-          new WaitCommand(3.0).andThen(() -> m_robotDrive.drive(0, 0, 0, false, false))
-      );
+    SmartDashboard.putData("Auto Chooser", autoChooser);
   }
 
   public Command getAutonomousCommand(){

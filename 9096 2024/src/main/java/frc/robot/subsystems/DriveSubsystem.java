@@ -11,10 +11,17 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.PathPlannerLogging;
+import com.pathplanner.lib.util.ReplanningConfig;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class DriveSubsystem extends SubsystemBase {
   boolean disabled = false;
@@ -59,6 +66,27 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   public DriveSubsystem() {
+ AutoBuilder.configureHolonomic(
+            this::getPose,
+            this::resetOdometry,
+            this::getRobotRelativeSpeeds,
+            this::driveAutonomous,
+            new HolonomicPathFollowerConfig(
+                    new PIDConstants(1.0, 0.0, 0.0),
+                    new PIDConstants(1.0, 0.0, 0.0),
+                    1.0,
+                    0.49,
+                    new ReplanningConfig()
+                  ),
+            () -> {
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this
+    );
   }
 
   @Override
@@ -76,6 +104,8 @@ public class DriveSubsystem extends SubsystemBase {
   public Pose2d getPose() {
     return m_odometry.getPoseMeters();
   }
+
+
 
   public void resetOdometry(Pose2d pose) {
     m_odometry.resetPosition(
@@ -96,6 +126,13 @@ public class DriveSubsystem extends SubsystemBase {
 
   public void enable() {
     disabled = false;
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds(){
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(),
+                                                           m_frontRight.getState(),
+                                                           m_rearLeft.getState(),
+                                                           m_rearRight.getState());
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
@@ -174,6 +211,11 @@ public class DriveSubsystem extends SubsystemBase {
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);
     m_rearRight.setDesiredState(desiredStates[3]);
+  }
+
+  public void driveAutonomous(ChassisSpeeds speeds) {
+    SwerveModuleState[] swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    setModuleStates(swerveModuleStates);
   }
 
   public void resetEncoders() {
